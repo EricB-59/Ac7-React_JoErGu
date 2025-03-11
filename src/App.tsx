@@ -1,7 +1,9 @@
+import Form from "./Form";
+
 function App() {
   return (
     <>
-      <h1 className="text-red-700">APP</h1>
+      <Form></Form>
     </>
   );
 }
