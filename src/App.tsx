@@ -3,7 +3,9 @@ import Form from "./Form";
 function App() {
   return (
     <>
-      <Form></Form>
+      <main>
+        <Form></Form>
+      </main>
     </>
   );
 }
