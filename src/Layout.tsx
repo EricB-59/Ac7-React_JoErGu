@@ -1,6 +1,9 @@
 import { BookOpen, Code, Lightbulb, Github } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 function Layout({ children }: any) {
+  const [t, i18n] = useTranslation("global");
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Header para actividad de clase */}
@@ -11,9 +14,9 @@ function Layout({ children }: any) {
             <div className="flex items-center space-x-3">
               <BookOpen className="h-6 w-6" />
               <div>
-                <h1 className="font-bold text-xl">Ac7_React</h1>
+                <h1 className="font-bold text-xl">{t("header.title")} </h1>
                 <p className="text-xs text-indigo-200">
-                  Práctica de Formularios en React
+                  {t("header.subtitle")}{" "}
                 </p>
               </div>
             </div>
@@ -25,30 +28,48 @@ function Layout({ children }: any) {
                 className="flex items-center space-x-1 hover:text-indigo-200 transition-colors text-sm"
               >
                 <Code size={16} />
-                <span>Ejercicios</span>
+                <span>{t("header.exercices")}</span>
               </a>
               <a
                 href="#"
                 className="flex items-center space-x-1 hover:text-indigo-200 transition-colors text-sm"
               >
                 <Lightbulb size={16} />
-                <span>Recursos</span>
+                <span>{t("header.resources")}</span>
               </a>
               <a
                 href="#"
                 className="flex items-center space-x-1 bg-white text-indigo-600 px-3 py-1 rounded-md text-sm font-medium hover:bg-indigo-100 transition-colors"
               >
                 <Github size={16} />
-                <span>Repositorio</span>
+                <span>{t("header.repository")}</span>
               </a>
             </nav>
             <nav>
               <ul className="flex flex-row gap-10">
                 <li>
-                  <button className="cursor-pointer">Español</button>
+                  <button
+                    onClick={() => i18n.changeLanguage("es")}
+                    className="cursor-pointer"
+                  >
+                    <img
+                      src="https://flagcdn.com/w40/es.png"
+                      alt="Español"
+                      className="w-6 h-6"
+                    />{" "}
+                  </button>
                 </li>
                 <li>
-                  <button className="cursor-pointer">Ingles</button>
+                  <button
+                    onClick={() => i18n.changeLanguage("en")}
+                    className="cursor-pointer"
+                  >
+                    <img
+                      src="https://flagcdn.com/w40/gb.png"
+                      alt="Español"
+                      className="w-6 h-6"
+                    />
+                  </button>
                 </li>
               </ul>
             </nav>
@@ -68,11 +89,10 @@ function Layout({ children }: any) {
             {/* Información de la actividad */}
             <div className="text-center md:text-left">
               <h3 className="font-semibold text-indigo-700">
-                Ac7_React - Formularios
+                {t("footer.main-text")}
               </h3>
               <p className="text-sm text-gray-600">
-                Desarrollado como parte del curso de Desarrollo de Aplicaciónes
-                Web
+                {t("footer.secondary-text")}
               </p>
             </div>
 
@@ -80,13 +100,13 @@ function Layout({ children }: any) {
             <div className="bg-indigo-50 p-3 rounded-lg max-w-md w-full">
               <h4 className="text-sm font-semibold text-indigo-700 flex items-center align-middle">
                 <Lightbulb size={16} className="mr-1" />
-                Práctica 07B - Formulario con REACT - Entrega 23/3/2025
+                {t("footer.blue-box")}
               </h4>
             </div>
 
             {/* Autor */}
             <div className="text-center md:text-right text-sm text-gray-500 flex flex-row gap-5">
-              <p className="font-bold">Estudiantes:</p>
+              <p className="font-bold">{t("footer.students")}:</p>
               <ul className="flex flex-row gap-5">
                 <li className="text-indigo-600">Eric Baena</li>
                 <li className="text-indigo-600">Joel Mesas</li>

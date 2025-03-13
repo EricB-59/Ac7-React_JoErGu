@@ -1,0 +1,18 @@
+{
+  "header": {
+    "title": "Forms Practice in React",
+    "subtitle": "Forms Practice in React",
+    "exercices": "Exercises",
+    "resources": "Resources",
+    "repository": "Repository",
+    "lng-es": "Spanish",
+    "lng-en": "English"
+  },
+  "body": {},
+  "footer": {
+    "main-text": "Ac7_React - Forms",
+    "secondary-text": "Developed as part of the Web Application Development course",
+    "blue-box": "Practice 07B - Form with REACT - Submission 03/23/2025",
+    "students": "Students"
+  }
+}
