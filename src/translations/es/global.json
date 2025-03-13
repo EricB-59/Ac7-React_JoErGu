@@ -1,0 +1,18 @@
+{
+  "header": {
+    "title": "Práctica de Formularios en React",
+    "subtitle": "Práctica de Formularios en React",
+    "exercices": "Ejercicios",
+    "resources": "Recursos",
+    "repository": "Repositorio",
+    "lng-es": "Español",
+    "lng-en": "Inglés"
+  },
+  "body": {},
+  "footer": {
+    "main-text": "Ac7_React - Formularios",
+    "secondary-text": "Desarrollado como parte del curso de Desarrollo de Aplicaciónes Web",
+    "blue-box": "Práctica 07B - Formulario con REACT - Entrega 23/3/2025",
+    "students": "Estudiantes"
+  }
+}
