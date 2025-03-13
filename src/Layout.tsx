@@ -53,7 +53,7 @@ function Layout({ children }: any) {
                     className="cursor-pointer"
                   >
                     <img
-                      src="https://flagcdn.com/w40/es.png"
+                      src="images/spain.png"
                       alt="Español"
                       className="w-6 h-6"
                     />{" "}
@@ -65,7 +65,7 @@ function Layout({ children }: any) {
                     className="cursor-pointer"
                   >
                     <img
-                      src="https://flagcdn.com/w40/gb.png"
+                      src="images/uk.png"
                       alt="Español"
                       className="w-6 h-6"
                     />
