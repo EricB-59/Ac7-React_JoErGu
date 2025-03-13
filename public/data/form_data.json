@@ -171,12 +171,7 @@
         "tipo": "select",
         "pregunta": "¿Con qué frecuencia ves películas?",
         "respuesta": "4",
-        "opciones": [
-          {
-            "grupo": "Opción 1-5 veces al mes",
-            "valores": ["1", "2", "3", "4", "5"]
-          }
-        ]
+        "opciones": ["1", "2", "3", "4", "5"]
       }
     ]
   }
