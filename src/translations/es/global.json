@@ -8,7 +8,13 @@
     "lng-es": "Español",
     "lng-en": "Inglés"
   },
-  "body": {},
+  "welcome": {
+    "title": "Bienvenido a la actividad de formularios en React",
+    "sub-title": "Hecho por: Guillem Sanchez | Eric Baena | Joel Mesas"
+  },
+  "body": {
+    "button-start": "Empezar Formulario"
+  },
   "footer": {
     "main-text": "Ac7_React - Formularios",
     "secondary-text": "Desarrollado como parte del curso de Desarrollo de Aplicaciónes Web",
