@@ -44,7 +44,9 @@ export default function Results() {
               className="w-full h-auto border-2 rounded-xl p-4 flex flex-col gap-2"
             >
               <h3 className="font-semibold">{quest.pregunta}</h3>
-              <p className="font-medium">Respuesta: {}</p>
+              <p className="font-medium">
+                Respuesta: {localStorage.getItem(quest.id)}
+              </p>
             </article>
           ))
         )}

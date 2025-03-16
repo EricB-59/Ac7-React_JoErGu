@@ -43,6 +43,7 @@ export default function Form({ stageFunction }: any) {
       ...prev,
       [id]: value,
     }));
+    localStorage.setItem(id, value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
