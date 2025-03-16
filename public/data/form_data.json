@@ -59,7 +59,7 @@
     "titulo": "Cuestionario de Evaluación Académica",
     "preguntas": [
       {
-        "id": "comentarios",
+        "id": "comentarios_ea",
         "tipo": "textarea",
         "pregunta": "¿Qué mejorarías en el curso?",
         "respuesta": "El contenido del curso está bien, pero sería útil más ejemplos prácticos.",
@@ -104,7 +104,7 @@
     "titulo": "Encuesta de Preferencias en Tecnología",
     "preguntas": [
       {
-        "id": "comentarios",
+        "id": "comentarios_pt",
         "tipo": "textarea",
         "pregunta": "¿Qué tecnología te gustaría aprender en el futuro?",
         "respuesta": "Me gustaría aprender sobre inteligencia artificial y machine learning.",
@@ -143,7 +143,7 @@
     "titulo": "Encuesta de Preferencias de Cine",
     "preguntas": [
       {
-        "id": "comentarios",
+        "id": "comentarios_pc",
         "tipo": "textarea",
         "pregunta": "¿Qué género de películas prefieres?",
         "respuesta": "Acción, ciencia ficción y comedia.",

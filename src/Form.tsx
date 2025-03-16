@@ -13,11 +13,14 @@ interface Form {
   preguntas: Ask[];
 }
 
-export default function Form() {
+export default function Form({ stageFunction }: any) {
   const [form, setForm] = useState<Form[]>([]);
   const [actualForm, setActualForm] = useState(0);
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
 
+  /**
+   *
+   */
   useEffect(() => {
     const fetchForm = async () => {
       try {
@@ -45,7 +48,13 @@ export default function Form() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Respuestas:", answers);
-    setActualForm((prevState) => prevState + 1);
+    // Cuando le das click al ultimo formulario invoca la funcion del padre para pasar la etapa de la App
+    // ! No puede ejecutar la funcion del padre hasta que valide el formulario
+    if (actualForm == 3) {
+      stageFunction();
+    } else {
+      setActualForm((prevState) => prevState + 1);
+    }
   };
 
   // Verificar si hay datos cargados
@@ -127,7 +136,7 @@ export default function Form() {
 
   return (
     <>
-      <section className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto mt-50">
+      <section className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto mt-10">
         <h1 className="text-3xl font-bold text-center text-indigo-700 mb-8">
           {currentForm.titulo}
         </h1>

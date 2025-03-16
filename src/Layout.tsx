@@ -16,7 +16,7 @@ function Layout({ children }: any) {
               <div>
                 <h1 className="font-bold text-xl">{t("header.title")} </h1>
                 <p className="text-xs text-indigo-200">
-                  {t("header.subtitle")}{" "}
+                  {t("header.subtitle")}
                 </p>
               </div>
             </div>
@@ -24,21 +24,24 @@ function Layout({ children }: any) {
             {/* Navegación simple */}
             <nav className="flex space-x-4 items-center">
               <a
-                href="#"
+                target="_blank"
+                href="https://github.com/Stucom-Pelai/MarkDown-Mermaid/blob/main/REACT/PRACTICA-REACT+FORMULARIO.md"
                 className="flex items-center space-x-1 hover:text-indigo-200 transition-colors text-sm"
               >
                 <Code size={16} />
                 <span>{t("header.exercices")}</span>
               </a>
               <a
-                href="#"
+                target="_blank"
+                href="https://github.com/Stucom-Pelai/MarkDown-Mermaid/tree/main/REACT"
                 className="flex items-center space-x-1 hover:text-indigo-200 transition-colors text-sm"
               >
                 <Lightbulb size={16} />
                 <span>{t("header.resources")}</span>
               </a>
               <a
-                href="#"
+                target="_blank"
+                href="https://github.com/EricB-59/Ac7-React_JoErGu"
                 className="flex items-center space-x-1 bg-white text-indigo-600 px-3 py-1 rounded-md text-sm font-medium hover:bg-indigo-100 transition-colors"
               >
                 <Github size={16} />

@@ -8,7 +8,13 @@
     "lng-es": "Spanish",
     "lng-en": "English"
   },
-  "body": {},
+  "welcome": {
+    "title": "Welcome to the React forms activity",
+    "sub-title": "Done by: Guillem Sanchez : Eric Baena : Joel Mesas"
+  },
+  "body": {
+    "button-start": "Start Forms"
+  },
   "footer": {
     "main-text": "Ac7_React - Forms",
     "secondary-text": "Developed as part of the Web Application Development course",
