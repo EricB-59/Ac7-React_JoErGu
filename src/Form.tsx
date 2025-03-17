@@ -6,6 +6,7 @@ interface Ask {
   pregunta: string;
   opciones?: string[];
   respuesta: string;
+  restricciones?: { min: number; max: number };
 }
 
 interface Form {
@@ -43,7 +44,28 @@ export default function Form({ stageFunction }: any) {
       ...prev,
       [id]: value,
     }));
-    localStorage.setItem(id, value);
+    validateInput(id, value);
+  };
+
+  const validateInput = (id: string, value: string) => {
+    const questions = form[actualForm].preguntas;
+
+    const quest = questions.find((quest) => quest.id == id);
+
+    console.log(quest);
+
+    if (quest?.restricciones == null) {
+      localStorage.setItem(id, value);
+      return;
+    }
+
+    if (
+      quest?.restricciones.min <= value.length &&
+      quest?.restricciones.max >= value.length
+    ) {
+      localStorage.setItem(id, value);
+      return;
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
