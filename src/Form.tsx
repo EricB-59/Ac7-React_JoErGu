@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 interface Ask {
   id: string;
-  tipo: "text" | "number" | "select" | "check" | "textarea";
+  tipo: "text" | "number" | "select" | "check" | "textarea" | "date" | "email";
   pregunta: string;
   opciones?: string[];
   respuesta: string;
@@ -17,11 +17,11 @@ interface Form {
 export default function Form({ stageFunction }: any) {
   const [form, setForm] = useState<Form[]>([]);
   const [actualForm, setActualForm] = useState(0);
-  const [answers, setAnswers] = useState<{ [key: string]: string }>({});
+  // Cambio 1: Ajustar el tipo de answers para permitir string o string[]
+  const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>(
+    {}
+  );
 
-  /**
-   *
-   */
   useEffect(() => {
     const fetchForm = async () => {
       try {
@@ -39,12 +39,18 @@ export default function Form({ stageFunction }: any) {
     console.log("Updated form state:", form);
   }, [form]);
 
-  const handleInputChange = (id: string, value: string) => {
+  const handleInputChange = (id: string, value: string | string[]) => {
+    if (value == "false") {
+      localStorage.removeItem(id);
+    }
     setAnswers((prev) => ({
       ...prev,
       [id]: value,
     }));
-    validateInput(id, value);
+    // validateInput sigue esperando un string, así que lo manejaremos más abajo si es necesario
+    if (typeof value === "string") {
+      validateInput(id, value);
+    }
   };
 
   const validateInput = (id: string, value: string) => {
@@ -52,27 +58,23 @@ export default function Form({ stageFunction }: any) {
 
     const quest = questions.find((quest) => quest.id == id);
 
-    console.log(quest);
+    if (!(quest?.restricciones == null)) {
+      const { min, max } = quest.restricciones;
+      const valueLength = value.length;
 
-    if (quest?.restricciones == null) {
-      localStorage.setItem(id, value);
-      return;
+      if (!(valueLength >= min && valueLength <= max)) {
+        // hacer que salga el componente de error de alguna manera
+        return;
+      }
     }
 
-    if (
-      quest?.restricciones.min <= value.length &&
-      quest?.restricciones.max >= value.length
-    ) {
-      localStorage.setItem(id, value);
-      return;
-    }
+    localStorage.setItem(id, value);
+    return;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Respuestas:", answers);
-    // Cuando le das click al ultimo formulario invoca la funcion del padre para pasar la etapa de la App
-    // ! No puede ejecutar la funcion del padre hasta que valide el formulario
     if (actualForm == 3) {
       stageFunction();
     } else {
@@ -80,7 +82,6 @@ export default function Form({ stageFunction }: any) {
     }
   };
 
-  // Verificar si hay datos cargados
   if (form.length === 0) {
     return <div>Cargando formulario...</div>;
   }
@@ -95,6 +96,7 @@ export default function Form({ stageFunction }: any) {
             className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             value={answers[pregunta.id] || ""}
             onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
+            required
           />
         );
       case "number":
@@ -105,6 +107,7 @@ export default function Form({ stageFunction }: any) {
             className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             value={answers[pregunta.id] || ""}
             onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
+            required
           />
         );
       case "textarea":
@@ -114,6 +117,7 @@ export default function Form({ stageFunction }: any) {
             className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-h-24"
             value={answers[pregunta.id] || ""}
             onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
+            required
           />
         );
       case "select":
@@ -134,21 +138,73 @@ export default function Form({ stageFunction }: any) {
         );
       case "check":
         return (
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id={pregunta.id}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              checked={answers[pregunta.id] === "true"}
-              onChange={(e) =>
-                handleInputChange(
-                  pregunta.id,
-                  e.target.checked ? "true" : "false"
-                )
-              }
-            />
-            <span className="ml-2 text-gray-700">{pregunta.pregunta}</span>
+          <div className="flex flex-col gap-2">
+            {pregunta.opciones && pregunta.opciones.length > 0 ? (
+              pregunta.opciones.map((opcion) => (
+                <div key={opcion} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id={`${pregunta.id}-${opcion}`}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    onChange={(e) => {
+                      handleInputChange(
+                        opcion,
+                        e.target.checked ? "true" : "false"
+                      );
+                    }}
+                  />
+                  <label
+                    htmlFor={`${pregunta.id}-${opcion}`}
+                    className="ml-2 text-gray-700"
+                  >
+                    {opcion}
+                  </label>
+                </div>
+              ))
+            ) : (
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={pregunta.id}
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  checked={answers[pregunta.id] === "true"}
+                  onChange={(e) =>
+                    handleInputChange(
+                      pregunta.id,
+                      e.target.checked ? "true" : "false"
+                    )
+                  }
+                  required
+                />
+                <label htmlFor={pregunta.id} className="ml-2 text-gray-700">
+                  {pregunta.pregunta}
+                </label>
+              </div>
+            )}
           </div>
+        );
+      case "date":
+        return (
+          <input
+            type="date"
+            id={pregunta.id}
+            className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            value={answers[pregunta.id] || ""}
+            onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
+            required
+          />
+        );
+      case "email":
+        return (
+          <input
+            type="email"
+            id={pregunta.id}
+            className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            placeholder="correo@stucom.com"
+            value={answers[pregunta.id] || ""}
+            onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
+            required
+          />
         );
       default:
         return null;
