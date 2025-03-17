@@ -36,18 +36,26 @@ export default function Results() {
 
   return (
     <>
-      <section className="grid-responsive ">
+      <section className="grid-responsive">
         {forms.flatMap((form) =>
           form.preguntas.map((quest) => (
-            <article
-              key={quest.id}
-              className="w-full h-auto border-2 rounded-xl p-4 flex flex-col gap-2"
-            >
-              <h3 className="font-semibold">{quest.pregunta}</h3>
-              <p className="font-medium">
-                Respuesta: {localStorage.getItem(quest.id)}
-              </p>
-            </article>
+            <div key={quest.id}>
+              <article className="w-full h-auto border-2 rounded-xl p-4 flex flex-col gap-2">
+                <h3 className="font-semibold">{quest.pregunta}</h3>
+                <p className="font-medium">
+                  Respuesta:{" "}
+                  {quest.tipo === "check" &&
+                  quest.opciones &&
+                  quest.opciones.length > 0
+                    ? quest.opciones
+                        .filter(
+                          (opcion) => localStorage.getItem(opcion) === "true"
+                        )
+                        .join(", ") || "Ninguna seleccionada"
+                    : localStorage.getItem(quest.id) || "No respondido"}
+                </p>
+              </article>
+            </div>
           ))
         )}
       </section>

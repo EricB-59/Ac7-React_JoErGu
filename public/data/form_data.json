@@ -14,7 +14,7 @@
       },
       {
         "id": "fecha_nacimiento",
-        "tipo": "text",
+        "tipo": "date",
         "pregunta": "¿Cuál es tu fecha de nacimiento?",
         "respuesta": "",
         "restricciones": {
@@ -27,7 +27,7 @@
       },
       {
         "id": "email",
-        "tipo": "text",
+        "tipo": "email",
         "pregunta": "¿Cuál es tu correo electrónico?",
         "respuesta": "",
         "restricciones": {
