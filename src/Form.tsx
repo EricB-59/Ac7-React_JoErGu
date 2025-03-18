@@ -92,6 +92,10 @@ export default function Form({ stageFunction }: any) {
     return;
   };
 
+  /**
+   * On this function we cancel the event of the form by default, for do our validation
+   * @param e with this param we have the event of the form to cancel the default behavior
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (actualForm == 3) {
