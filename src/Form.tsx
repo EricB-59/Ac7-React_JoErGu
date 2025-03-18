@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 
+// In this interface it is necessary to take into account that according to the json it is possible that some values are null
 interface Ask {
   id: string;
   tipo: "text" | "number" | "select" | "check" | "textarea" | "date" | "email";
@@ -8,6 +9,7 @@ interface Ask {
   opciones?: string[];
   respuesta: string;
   restricciones?: { min: number; max: number };
+  validacion?: { max_seleccionados: number };
 }
 
 interface Form {
@@ -16,14 +18,32 @@ interface Form {
 }
 
 export default function Form({ stageFunction }: any) {
+  // With this state we save all the forms information from the JSON
   const [form, setForm] = useState<Form[]>([]);
-  const [actualForm, setActualForm] = useState(0);
-  // Cambio 1: Ajustar el tipo de answers para permitir string o string[]
+
+  // With this state we can switch between forms and with localStorage we save the current form if the user accidentally closes the page
+  const [actualForm, setActualForm] = useState(
+    Number(localStorage.getItem("actualForm"))
+  );
+
+  // With this state we control the values of the inputs
   const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>(
     {}
   );
+
+  // With this state we control if any input is invalid and we can display information to the user about which input is wrong
   const [error, setError] = useState("");
 
+  /**
+   * This useEffect execute a localStorage function to save the current form
+   */
+  useEffect(() => {
+    localStorage.setItem("actualForm", actualForm.toString());
+  }, [actualForm]);
+
+  /**
+   *
+   */
   useEffect(() => {
     const fetchForm = async () => {
       try {
@@ -37,12 +57,7 @@ export default function Form({ stageFunction }: any) {
     fetchForm();
   }, []);
 
-  useEffect(() => {
-    console.log("Updated form state:", form);
-  }, [form]);
-
   const handleInputChange = (id: string, value: string | string[]) => {
-    console.log(value);
     if (value == "false") {
       localStorage.removeItem(id);
     }
@@ -56,7 +71,6 @@ export default function Form({ stageFunction }: any) {
   };
 
   const validateInput = (id: string, value: string) => {
-    console.log("validate");
     const questions = form[actualForm].preguntas;
 
     const quest = questions.find((quest) => quest.id == id);
@@ -66,7 +80,7 @@ export default function Form({ stageFunction }: any) {
       const valueLength = value.length;
 
       if (!(valueLength >= min && valueLength <= max)) {
-        setError("Error con " + id);
+        setError("Error con: " + quest.pregunta);
         return;
       } else {
         setError("");
@@ -82,6 +96,7 @@ export default function Form({ stageFunction }: any) {
     e.preventDefault();
     if (actualForm == 3) {
       stageFunction();
+      setActualForm(0);
       return;
     }
 
@@ -223,7 +238,7 @@ export default function Form({ stageFunction }: any) {
 
   return (
     <>
-      <section className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto mt-10">
+      <section className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-center text-indigo-700 mb-8">
           {currentForm.titulo}
         </h1>
