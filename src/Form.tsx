@@ -42,6 +42,7 @@ export default function Form({ stageFunction }: any) {
   }, [form]);
 
   const handleInputChange = (id: string, value: string | string[]) => {
+    console.log(value);
     if (value == "false") {
       localStorage.removeItem(id);
     }
@@ -55,6 +56,7 @@ export default function Form({ stageFunction }: any) {
   };
 
   const validateInput = (id: string, value: string) => {
+    console.log("validate");
     const questions = form[actualForm].preguntas;
 
     const quest = questions.find((quest) => quest.id == id);
@@ -72,15 +74,18 @@ export default function Form({ stageFunction }: any) {
       }
     }
 
+    localStorage.setItem(id, value);
     return;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Respuestas:", answers);
     if (actualForm == 3) {
       stageFunction();
-    } else {
+      return;
+    }
+
+    if (error == "") {
       setActualForm((prevState) => prevState + 1);
     }
   };
