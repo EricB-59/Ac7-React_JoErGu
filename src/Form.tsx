@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ErrorMessage from "./ErrorMessage";
 
 interface Ask {
   id: string;
@@ -21,6 +22,7 @@ export default function Form({ stageFunction }: any) {
   const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>(
     {}
   );
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchForm = async () => {
@@ -47,7 +49,6 @@ export default function Form({ stageFunction }: any) {
       ...prev,
       [id]: value,
     }));
-    // validateInput sigue esperando un string, así que lo manejaremos más abajo si es necesario
     if (typeof value === "string") {
       validateInput(id, value);
     }
@@ -63,12 +64,14 @@ export default function Form({ stageFunction }: any) {
       const valueLength = value.length;
 
       if (!(valueLength >= min && valueLength <= max)) {
-        // hacer que salga el componente de error de alguna manera
+        setError("Error con " + id);
         return;
+      } else {
+        setError("");
+        localStorage.setItem(id, value);
       }
     }
 
-    localStorage.setItem(id, value);
     return;
   };
 
@@ -231,13 +234,18 @@ export default function Form({ stageFunction }: any) {
               {renderQuestion(pregunta)}
             </div>
           ))}
-          <div className="flex justify-center mt-8">
+          <div className="flex flex-col justify-center mt-8">
             <button
               type="submit"
               className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Enviar Respuestas
             </button>
+            {error == "" ? (
+              <></>
+            ) : (
+              <ErrorMessage message={error}></ErrorMessage>
+            )}
           </div>
         </form>
       </section>

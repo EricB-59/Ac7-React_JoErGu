@@ -9,8 +9,8 @@
     "lng-en": "English"
   },
   "welcome": {
-    "title": "Welcome to the React forms activity",
-    "sub-title": "Done by: Guillem Sanchez : Eric Baena : Joel Mesas"
+    "title": "Forms activity in React",
+    "sub-title": "Done by: Guillem Sanchez | Eric Baena | Joel Mesas"
   },
   "body": {
     "button-start": "Start Forms"
