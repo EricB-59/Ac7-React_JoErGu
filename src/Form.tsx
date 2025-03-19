@@ -242,8 +242,8 @@ export default function Form({ stageFunction }: any) {
 
   return (
     <>
-      <section className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-indigo-700 mb-8">
+      <section className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto bg-[url(../public/images/background.png)]">
+        <h1 className="text-3xl font-bold text-center text-indigo-700 mb-8 bg-indigo-50 p-4 rounded-lg">
           {currentForm.titulo}
         </h1>
         <form onSubmit={handleSubmit} className="w-full space-y-6">
