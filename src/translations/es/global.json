@@ -25,5 +25,11 @@
     "answer": "Respuesta",
     "selected": "Ninguno seleccionado",
     "noAnswered": "No respondido"
+  },
+  "error": {
+    "errorWith": "Error en  "
+  },
+  "buttons": {
+    "submit": "Enviar Respuestas"
   }
 }

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 export default function Welcome({ children }: any) {
-  const [t, i18n] = useTranslation("global");
+  const [t] = useTranslation("global");
 
   return (
     <section className="p-20 w-full h-full flex flex-col justify-center items-center gap-20">

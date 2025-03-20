@@ -25,5 +25,11 @@
     "answer": "Answer",
     "selected": "Not selected",
     "noAnswered": "Not answered"
+  },
+  "error": {
+    "errorWith": "Error with  "
+  },
+  "buttons": {
+    "submit": "Submit Answers"
   }
 }

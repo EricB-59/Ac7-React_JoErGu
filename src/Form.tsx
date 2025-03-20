@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ErrorMessage from "./ErrorMessage";
+import { t } from "i18next";
 
 // In this interface we take into account that according to the JSON some values might be null
 interface Ask {
@@ -22,13 +23,17 @@ export default function Form({ stageFunction }: { stageFunction: () => void }) {
   // This state stores all the forms information from the JSON
   const [form, setForm] = useState<Form[]>([]);
   // This state controls the current form. It is saved in localStorage so that the current form is retained if the user closes the page.
-  const [actualForm, setActualForm] = useState(Number(localStorage.getItem("actualForm")));
+  const [actualForm, setActualForm] = useState(
+    Number(localStorage.getItem("actualForm"))
+  );
   // This state controls the values of the inputs
-  const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>({});
+  const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>(
+    {}
+  );
   // This state controls if any input is invalid and we display error information to the user.
   const [error, setError] = useState("");
   // Get the current language from i18n
-  const { i18n } = useTranslation();
+  const [t, i18n] = useTranslation("global");
 
   /**
    * This useEffect saves the current form in localStorage
@@ -84,7 +89,7 @@ export default function Form({ stageFunction }: { stageFunction: () => void }) {
       const valueLength = value.length;
 
       if (!(valueLength >= min && valueLength <= max)) {
-        setError("Error with: " + quest.pregunta);
+        setError(t("error.errorWith") + quest.pregunta);
         return;
       } else {
         setError("");
@@ -184,7 +189,10 @@ export default function Form({ stageFunction }: { stageFunction: () => void }) {
                     )
                   }
                 />
-                <label htmlFor={`${pregunta.id}-${opcion}`} className="ml-2 text-gray-700">
+                <label
+                  htmlFor={`${pregunta.id}-${opcion}`}
+                  className="ml-2 text-gray-700"
+                >
                   {opcion}
                 </label>
               </div>
@@ -242,7 +250,7 @@ export default function Form({ stageFunction }: { stageFunction: () => void }) {
               type="submit"
               className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              Submit Answers
+              {t("buttons.submit")}
             </button>
             {error !== "" && <ErrorMessage message={error} />}
           </div>
