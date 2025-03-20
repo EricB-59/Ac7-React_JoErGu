@@ -2,6 +2,10 @@ import { BookOpen, Code, Lightbulb, Github } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 function Layout({ children }: any) {
+  /*
+  The following const, initializes the translation utilities within the component 
+  so that multilingual content can be displayed and language switches can be handled dynamically.
+  */
   const [t, i18n] = useTranslation("global");
 
   return (

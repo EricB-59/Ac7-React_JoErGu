@@ -70,6 +70,12 @@ export default function Form({ stageFunction }: any) {
     }
   };
 
+  /*
+  This function is used to validate the input of a specific field in a form. We use it to:
+  - Validate that a field entry meets the defined constraints.
+  - Report an error if validation fails.
+  - Store the value in local storage for use it later to print the results.
+  */
   const validateInput = (id: string, value: string) => {
     const questions = form[actualForm].preguntas;
 
