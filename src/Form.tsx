@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import ErrorMessage from "./ErrorMessage";
 
-// In this interface it is necessary to take into account that according to the json it is possible that some values are null
+// In this interface we take into account that according to the JSON some values might be null
 interface Ask {
   id: string;
   tipo: "text" | "number" | "select" | "check" | "textarea" | "date" | "email";
@@ -17,48 +18,45 @@ interface Form {
   preguntas: Ask[];
 }
 
-export default function Form({ stageFunction }: any) {
-  // With this state we save all the forms information from the JSON
+export default function Form({ stageFunction }: { stageFunction: () => void }) {
+  // This state stores all the forms information from the JSON
   const [form, setForm] = useState<Form[]>([]);
-
-  // With this state we can switch between forms and with localStorage we save the current form if the user accidentally closes the page
-  const [actualForm, setActualForm] = useState(
-    Number(localStorage.getItem("actualForm"))
-  );
-
-  // With this state we control the values of the inputs
-  const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>(
-    {}
-  );
-
-  // With this state we control if any input is invalid and we can display information to the user about which input is wrong
+  // This state controls the current form. It is saved in localStorage so that the current form is retained if the user closes the page.
+  const [actualForm, setActualForm] = useState(Number(localStorage.getItem("actualForm")));
+  // This state controls the values of the inputs
+  const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>({});
+  // This state controls if any input is invalid and we display error information to the user.
   const [error, setError] = useState("");
+  // Get the current language from i18n
+  const { i18n } = useTranslation();
 
   /**
-   * This useEffect execute a localStorage function to save the current form
+   * This useEffect saves the current form in localStorage
    */
   useEffect(() => {
     localStorage.setItem("actualForm", actualForm.toString());
   }, [actualForm]);
 
   /**
-   *
+   * We load the form JSON dynamically according to the selected language.
    */
   useEffect(() => {
     const fetchForm = async () => {
       try {
-        const response = await fetch("/data/form_data.json");
+        const response = await fetch(`/data/${i18n.language}/form_data.json`);
+        if (!response.ok) throw new Error("Error loading the questionnaire");
         const data = await response.json();
         setForm(data);
       } catch (error) {
-        console.error("Error al cargar el cuestionario:", error);
+        console.error("Error loading the questionnaire:", error);
       }
     };
     fetchForm();
-  }, []);
+  }, [i18n.language]);
 
+  // Handle changes for simple input types (text, number, textarea, select, date, email)
   const handleInputChange = (id: string, value: string | string[]) => {
-    if (value == "false") {
+    if (value === "false") {
       localStorage.removeItem(id);
     }
     setAnswers((prev) => ({
@@ -71,53 +69,53 @@ export default function Form({ stageFunction }: any) {
   };
 
   /*
-  This function is used to validate the input of a specific field in a form. We use it to:
-  - Validate that a field entry meets the defined constraints.
-  - Report an error if validation fails.
-  - Store the value in local storage for use it later to print the results.
+    This function validates the input of a specific field in the form.
+    It is used to:
+    - Validate that the entry meets the defined constraints.
+    - Report an error if validation fails.
+    - Store the value in localStorage to later print the results.
   */
   const validateInput = (id: string, value: string) => {
     const questions = form[actualForm].preguntas;
+    const quest = questions.find((quest) => quest.id === id);
 
-    const quest = questions.find((quest) => quest.id == id);
-
-    if (!(quest?.restricciones == null)) {
+    if (quest && quest.restricciones) {
       const { min, max } = quest.restricciones;
       const valueLength = value.length;
 
       if (!(valueLength >= min && valueLength <= max)) {
-        setError("Error con: " + quest.pregunta);
+        setError("Error with: " + quest.pregunta);
         return;
       } else {
         setError("");
         localStorage.setItem(id, value);
       }
     }
-
     localStorage.setItem(id, value);
-    return;
   };
 
   /**
-   * On this function we cancel the event of the form by default, for do our validation
-   * @param e with this param we have the event of the form to cancel the default behavior
+   * Function executed when the form is submitted:
+   * - Validates the current form.
+   * - If it is the last form, it calls stageFunction() to move to the results.
    */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (actualForm == 3) {
+    if (actualForm === form.length - 1) {
       stageFunction();
       setActualForm(0);
       return;
     }
-
-    if (error == "") {
+    if (error === "") {
       setActualForm((prevState) => prevState + 1);
     }
   };
 
   if (form.length === 0) {
-    return <div>Cargando formulario...</div>;
+    return <div>Loading form...</div>;
   }
+
+  const currentForm = form[actualForm];
 
   const renderQuestion = (pregunta: Ask) => {
     switch (pregunta.tipo) {
@@ -127,7 +125,7 @@ export default function Form({ stageFunction }: any) {
             type="text"
             id={pregunta.id}
             className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            value={answers[pregunta.id] || ""}
+            value={(answers[pregunta.id] as string) || ""}
             onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
             required
           />
@@ -138,7 +136,7 @@ export default function Form({ stageFunction }: any) {
             type="number"
             id={pregunta.id}
             className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            value={answers[pregunta.id] || ""}
+            value={(answers[pregunta.id] as string) || ""}
             onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
             required
           />
@@ -148,7 +146,7 @@ export default function Form({ stageFunction }: any) {
           <textarea
             id={pregunta.id}
             className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-h-24"
-            value={answers[pregunta.id] || ""}
+            value={(answers[pregunta.id] as string) || ""}
             onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
             required
           />
@@ -158,10 +156,10 @@ export default function Form({ stageFunction }: any) {
           <select
             id={pregunta.id}
             className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            value={answers[pregunta.id] || ""}
+            value={(answers[pregunta.id] as string) || ""}
             onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
           >
-            <option value="">Selecciona una opción</option>
+            <option value="">Select an option</option>
             {pregunta.opciones?.map((opcion) => (
               <option key={opcion} value={opcion}>
                 {opcion}
@@ -170,50 +168,27 @@ export default function Form({ stageFunction }: any) {
           </select>
         );
       case "check":
+        // For "check" type, it is assumed that there are always options (multiple selection)
         return (
           <div className="flex flex-col gap-2">
-            {pregunta.opciones && pregunta.opciones.length > 0 ? (
-              pregunta.opciones.map((opcion) => (
-                <div key={opcion} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`${pregunta.id}-${opcion}`}
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    onChange={(e) => {
-                      handleInputChange(
-                        opcion,
-                        e.target.checked ? "true" : "false"
-                      );
-                    }}
-                  />
-                  <label
-                    htmlFor={`${pregunta.id}-${opcion}`}
-                    className="ml-2 text-gray-700"
-                  >
-                    {opcion}
-                  </label>
-                </div>
-              ))
-            ) : (
-              <div className="flex items-center">
+            {pregunta.opciones?.map((opcion) => (
+              <div key={opcion} className="flex items-center">
                 <input
                   type="checkbox"
-                  id={pregunta.id}
+                  id={`${pregunta.id}-${opcion}`}
                   className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                  checked={answers[pregunta.id] === "true"}
                   onChange={(e) =>
                     handleInputChange(
-                      pregunta.id,
+                      opcion,
                       e.target.checked ? "true" : "false"
                     )
                   }
-                  required
                 />
-                <label htmlFor={pregunta.id} className="ml-2 text-gray-700">
-                  {pregunta.pregunta}
+                <label htmlFor={`${pregunta.id}-${opcion}`} className="ml-2 text-gray-700">
+                  {opcion}
                 </label>
               </div>
-            )}
+            ))}
           </div>
         );
       case "date":
@@ -222,7 +197,7 @@ export default function Form({ stageFunction }: any) {
             type="date"
             id={pregunta.id}
             className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            value={answers[pregunta.id] || ""}
+            value={(answers[pregunta.id] as string) || ""}
             onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
             required
           />
@@ -234,7 +209,7 @@ export default function Form({ stageFunction }: any) {
             id={pregunta.id}
             className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             placeholder="correo@stucom.com"
-            value={answers[pregunta.id] || ""}
+            value={(answers[pregunta.id] as string) || ""}
             onChange={(e) => handleInputChange(pregunta.id, e.target.value)}
             required
           />
@@ -243,8 +218,6 @@ export default function Form({ stageFunction }: any) {
         return null;
     }
   };
-
-  const currentForm = form[actualForm];
 
   return (
     <>
@@ -269,13 +242,9 @@ export default function Form({ stageFunction }: any) {
               type="submit"
               className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              Enviar Respuestas
+              Submit Answers
             </button>
-            {error == "" ? (
-              <></>
-            ) : (
-              <ErrorMessage message={error}></ErrorMessage>
-            )}
+            {error !== "" && <ErrorMessage message={error} />}
           </div>
         </form>
       </section>

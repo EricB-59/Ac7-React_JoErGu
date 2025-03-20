@@ -20,5 +20,10 @@
     "secondary-text": "Desarrollado como parte del curso de Desarrollo de Aplicaciónes Web",
     "blue-box": "Práctica 07B - Formulario con REACT - Entrega 23/3/2025",
     "students": "Estudiantes"
+  },
+  "results": {
+    "answer": "Respuesta",
+    "selected": "Ninguno seleccionado",
+    "noAnswered": "No respondido"
   }
 }
