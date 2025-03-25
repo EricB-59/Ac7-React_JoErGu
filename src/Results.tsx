@@ -19,7 +19,7 @@ interface Form {
  * We use this component to gather all the data from the forms
  * in the JSON so that we can iterate through each form and display the responses.
  */
-export default function Results() {
+export default function Results({ stageReset }: { stageReset: () => void }) {
   const [t, i18n] = useTranslation("global");
   const [forms, setForms] = useState<Form[]>([]);
 
@@ -41,8 +41,19 @@ export default function Results() {
     console.log(forms);
   }, [forms]);
 
+  const handleReset = () => {
+    localStorage.clear();
+    stageReset();
+  };
+
   return (
     <>
+      <button
+        className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 w-64 h-12 cursor-pointer mb-7"
+        onClick={handleReset}
+      >
+        {t("buttons.restart")}
+      </button>
       {/** We use flatMap to iterate through each form and map to iterate through the questions */}
       <section className="grid-responsive">
         {forms.flatMap((form) =>
@@ -65,7 +76,7 @@ export default function Results() {
                           (opcion) => localStorage.getItem(opcion) === "true"
                         )
                         .join(", ") || t("results.selected")
-                    : localStorage.getItem(quest.id) || t("results.noAnswered")}    
+                    : localStorage.getItem(quest.id) || t("results.noAnswered")}
                 </p>
               </article>
             </div>

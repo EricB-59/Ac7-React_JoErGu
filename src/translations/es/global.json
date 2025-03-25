@@ -30,6 +30,7 @@
     "errorWith": "Error en  "
   },
   "buttons": {
-    "submit": "Enviar Respuestas"
+    "submit": "Enviar Respuestas",
+    "restart": "Reiniciar"
   }
 }

@@ -12,6 +12,10 @@ function App() {
     setStage((prevState) => prevState + 1);
   }
 
+  function handleResetStage() {
+    setStage(0);
+  }
+
   function renderStage() {
     switch (stage) {
       case 0:
@@ -28,7 +32,7 @@ function App() {
       case 1:
         return <Form stageFunction={handleChangeStage}></Form>;
       case 2:
-        return <Results></Results>;
+        return <Results stageReset={handleResetStage}></Results>;
       default:
         return <h1>Problema cargando el formulario...</h1>;
         break;

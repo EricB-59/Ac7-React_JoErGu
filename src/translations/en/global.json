@@ -30,6 +30,7 @@
     "errorWith": "Error with  "
   },
   "buttons": {
-    "submit": "Submit Answers"
+    "submit": "Submit Answers",
+    "restart": "Restart"
   }
 }
